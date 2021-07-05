@@ -41,7 +41,7 @@ def getSubtitles(srt_file):
 youtube_id = 'Fwmw_OBqXVM'
 
 system(f'./youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang ru --convert-subs=srt --extract-audio --ffmpeg-location ./ --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
-subtitles = getSubtitles(f'/Users/sergejkomarov/Downloads/{youtube_id}.ru.srt')
+subtitles = getSubtitles(f'{youtube_id}.ru.srt')
 
 model = nn.Sequential(
         wavencoder.models.Wav2Vec(pretrained=True),
