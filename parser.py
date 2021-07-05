@@ -28,12 +28,14 @@ def getSubtitles(srt_file):
             if len(subtitles)>0:
                 subtitles[-1]['end'] = toSec(p)
     
-            if srt[i+2].strip() != '':
+            s = srt[i+2].strip()
+            if s != '' and ('[' not in s):
                 subtitles.append({
-                    'text':  srt[i+2].strip(),
+                    'text':  s,
                     'start': toSec(start),
                     'end': ''
                     })
+                
     return subtitles
 
 youtube_id = 'Fwmw_OBqXVM'
