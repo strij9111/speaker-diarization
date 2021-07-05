@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 import torchaudio
 import wavencoder
@@ -6,7 +5,6 @@ import numpy as np
 import pandas as pd
 from os import system
 from consensus import Consensus
-from collections import Counter
 from sklearn.preprocessing import MinMaxScaler
 
 torchaudio.set_audio_backend("soundfile")
@@ -39,20 +37,22 @@ def getSubtitles(srt_file):
     return subtitles
 
 youtube_id = 'Fwmw_OBqXVM'
+path_youtube_dl = './'
+path_ffmpeg = './'
 
-system(f'./youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang ru --convert-subs=srt --extract-audio --ffmpeg-location ./ --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
-subtitles = getSubtitles(f'{youtube_id}.ru.srt')
+system(f'{path_youtube_dl}youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang ru --convert-subs=srt --extract-audio --ffmpeg-location {path_ffmpeg} --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
+subtitles = getSubtitles(f'/Users/sergejkomarov/Downloads/{youtube_id}.ru.srt')
 
 model = nn.Sequential(
         wavencoder.models.Wav2Vec(pretrained=True),
-        wavencoder.models.LSTM_Attn_Classifier(512, 128, 64, return_attn_weights=False, attn_type='soft')
+        wavencoder.models.LSTM_Attn_Classifier(512, 256, 128, return_attn_weights=False, attn_type='soft')
 )
 
 x, Fs = torchaudio.load(f'{youtube_id}.wav')
     
 for i, subtitle in enumerate(subtitles):
     if subtitle['end'] == '':
-        subtitle['end'] = Fs * len(x)
+        subtitle['end'] = Fs * x.shape[1]
     
     segment = x[..., int(Fs * subtitle['start']):int(Fs * subtitle['end'])]
     vector = model(segment)
@@ -74,8 +74,10 @@ options = {'model': {'choices': ['hacsingle', 'hacaverage',
            'min_samples': {'irange': [5, 20]},
            'data_subsampling_rate': 0.2}
 
-consensus = Consensus(X_scaled, options, precompute='distances', linkage='single')
-consensus.fit()
-
-print('Speakers in video: ', len(set(consensus.model.labels_)))
-
+c = np.array([])
+for i in range(1, 20):
+    consensus = Consensus(X_scaled, options, precompute='distances', linkage='single')
+    consensus.fit()
+    c = np.append(c, len(set(consensus.model.labels_)))
+    
+print('Speakers in video: ', int(np.mean(c)))
