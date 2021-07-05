@@ -39,8 +39,9 @@ def getSubtitles(srt_file):
 youtube_id = 'Fwmw_OBqXVM'
 path_youtube_dl = './'
 path_ffmpeg = './'
+sub_lang = 'ru'
 
-system(f'{path_youtube_dl}youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang ru --convert-subs=srt --extract-audio --ffmpeg-location {path_ffmpeg} --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
+system(f'{path_youtube_dl}youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang {sub_lang} --convert-subs=srt --extract-audio --ffmpeg-location {path_ffmpeg} --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
 subtitles = getSubtitles(f'/Users/sergejkomarov/Downloads/{youtube_id}.ru.srt')
 
 model = nn.Sequential(
@@ -81,3 +82,4 @@ for i in range(1, 20):
     c = np.append(c, len(set(consensus.model.labels_)))
     
 print('Speakers in video: ', int(np.mean(c)))
+
