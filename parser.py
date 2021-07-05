@@ -42,7 +42,7 @@ path_ffmpeg = './'
 sub_lang = 'ru'
 
 system(f'{path_youtube_dl}youtube-dl -cwi -o "%(id)s.%(ext)s" --write-auto-sub --sub-lang {sub_lang} --convert-subs=srt --extract-audio --ffmpeg-location {path_ffmpeg} --audio-format wav --audio-quality 0 https://www.youtube.com/watch?v={youtube_id}')
-subtitles = getSubtitles(f'/Users/sergejkomarov/Downloads/{youtube_id}.{sub_lang}.srt')
+subtitles = getSubtitles(f'{youtube_id}.{sub_lang}.srt')
 
 model = nn.Sequential(
         wavencoder.models.Wav2Vec(pretrained=True),
