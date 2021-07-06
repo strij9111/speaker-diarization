@@ -73,7 +73,7 @@ options = {'model': {'choices': ['hacsingle', 'hacaverage', 'mbkmeans', 'kmeans'
            'gamma': {'choices': [0.001, 0.01, 0.1, 1.]},
            'n_clusters': {'irange': [2, 10]},
            'eps': {'choices': [0.1, 0.5, 1.]},
-           'min_samples': {'irange': [5, 20]},
+           'min_samples': {'irange': [3, 4]},
            'data_subsampling_rate': 0.2}
 
 c = np.array([])
