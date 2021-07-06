@@ -68,8 +68,7 @@ df.columns = ['v_{}'.format(x+1) for x in df.columns]
 
 X_scaled = MinMaxScaler().fit_transform(df)
  
-options = {'model': {'choices': ['hacsingle', 'hacaverage',
-                                 'kmeans', 'dbscan']},
+options = {'model': {'choices': ['hacsingle', 'hacaverage', 'mbkmeans', 'kmeans', 'dbscan']},
            'metric': 'rbf',
            'gamma': {'choices': [0.001, 0.01, 0.1, 1.]},
            'n_clusters': {'irange': [2, 10]},
